@@ -2,15 +2,16 @@ package db
 
 import (
 	"context"
+	"github.com/Bakhram74/small_bank/util"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestCreateAccount(t *testing.T) {
 	arg := CreateAccountParams{
-		Owner:    "Bob",
-		Balance:  200,
-		Currency: "USD",
+		Owner:    util.RandomOwner(),
+		Balance:  util.RandomMoney(),
+		Currency: util.RandomCurrency(),
 	}
 	account, err := testQueries.CreateAccount(context.Background(), arg)
 	require.NoError(t, err)
