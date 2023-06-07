@@ -88,17 +88,17 @@ func TestTransferTx(t *testing.T) {
 		require.True(t, k >= 1 && k <= n)
 		require.NotContains(t, existed, k)
 		existed[k] = true
-
-		// check the final updated balance
-		updatedAccount1, err := store.GetAccount(context.Background(), account1.ID)
-		require.NoError(t, err)
-
-		updatedAccount2, err := store.GetAccount(context.Background(), account2.ID)
-		require.NoError(t, err)
-
-		fmt.Println(">> after:", updatedAccount1.Balance, updatedAccount2.Balance)
-
-		require.Equal(t, account1.Balance-int64(n)*amount, updatedAccount1.Balance)
-		require.Equal(t, account2.Balance+int64(n)*amount, updatedAccount2.Balance)
 	}
+	// check the final updated balance
+	updatedAccount1, err := store.GetAccount(context.Background(), account1.ID)
+	require.NoError(t, err)
+
+	updatedAccount2, err := store.GetAccount(context.Background(), account2.ID)
+	require.NoError(t, err)
+
+	fmt.Println(">> after:", updatedAccount1.Balance, updatedAccount2.Balance)
+
+	require.Equal(t, account1.Balance-int64(n)*amount, updatedAccount1.Balance)
+	require.Equal(t, account2.Balance+int64(n)*amount, updatedAccount2.Balance)
+
 }
