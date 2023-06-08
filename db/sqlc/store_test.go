@@ -12,7 +12,7 @@ func TestTransferTx(t *testing.T) {
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
 	fmt.Println(">> before:", account1.Balance, account2.Balance)
-	n := 3
+	n := 5
 	amount := int64(10)
 
 	results := make(chan TransferTxResult)
