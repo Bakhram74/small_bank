@@ -8,19 +8,24 @@ create table accounts(
 
 create table entries (
                          id bigserial primary key,
-                         account_id bigint not null references accounts(id),
+                         account_id bigint not null ,
                          amount bigint not null ,
                          created_at timestamptz not null default now()
 );
 
 create table transfers (
                            id bigserial primary key,
-                           from_account_id bigint not null references accounts(id),
-                           to_account_id bigint not null references accounts(id),
+                           from_account_id bigint not null ,
+                           to_account_id bigint not null ,
                            amount bigint not null check(amount > -1) ,
                            created_at timestamptz not null default now()
 );
 
+ALTER TABLE "entries" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
+
+ALTER TABLE "transfers" ADD FOREIGN KEY ("from_account_id") REFERENCES "accounts" ("id");
+
+ALTER TABLE "transfers" ADD FOREIGN KEY ("to_account_id") REFERENCES "accounts" ("id");
 
 create index on accounts (owner);
 create index on entries (account_id);

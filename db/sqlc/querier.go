@@ -14,6 +14,9 @@ type Querier interface {
 	CreateTransfer(ctx context.Context, arg CreateTransferParams) (Transfer, error)
 	DeleteAccount(ctx context.Context, id int64) error
 	GetAccount(ctx context.Context, id int64) (Account, error)
+	// -- name: GetAccountForUpdate :one
+	// SELECT * FROM accounts
+	// WHERE id = $1 LIMIT 1 FOR UPDATE;
 	GetAccountForUpdate(ctx context.Context, id int64) (Account, error)
 	GetEntry(ctx context.Context, accountID int64) (Entry, error)
 	GetTransfer(ctx context.Context, id int64) (Transfer, error)
