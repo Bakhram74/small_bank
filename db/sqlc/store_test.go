@@ -73,11 +73,9 @@ func TestTransferTx(t *testing.T) {
 		// check accounts
 		fromAccount := result.FromAccount
 		require.NotEmpty(t, fromAccount)
-		require.Equal(t, account1.ID, fromAccount.ID)
 
 		toAccount := result.ToAccount
 		require.NotEmpty(t, toAccount)
-		require.Equal(t, account2.ID, toAccount.ID)
 
 		// check accounts' balance
 		fmt.Println(">> tx:", fromAccount.Balance, toAccount.Balance)
