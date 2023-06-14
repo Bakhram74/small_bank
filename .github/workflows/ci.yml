@@ -50,7 +50,7 @@ jobs:
       - name: Migrate
         uses: vovavc/migrate-github-action@v0.2.1
         with:
-            path: ./backend/migrate
+            path: ./db/migration
             database: postgres://root:1234@localhost:5436/small_bank?sslmode=disable
             command: up
 
