@@ -24,7 +24,7 @@ jobs:
           POSTGRES_PASSWORD: 1234
           POSTGRES_DB: small_bank
         ports:
-          - 5436:5432
+          - 5432:5432
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -51,7 +51,7 @@ jobs:
         uses: vovavc/migrate-github-action@v0.2.1
         with:
             path: ./db/migration
-            database: postgres://root:1234@localhost:5436/small_bank?sslmode=disable
+            database: postgres://root:1234@localhost:5432/small_bank?sslmode=disable
             command: up
 
       - name: Test
