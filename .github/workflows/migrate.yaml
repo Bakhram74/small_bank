@@ -1,0 +1,16 @@
+name: run migration
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Migrate
+        uses: vovavc/migrate-github-action@v0.2.1
+        with:
+          path: ./db/migration
+          database: postgres://root:1234@localhost:5432/small_bank?sslmode=disable
+          command: up
