@@ -39,20 +39,15 @@ jobs:
         with:
           go-version: 1.19
 
-#      - name: Install golang-migrate
-#        run: |
-#          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.12.2/migrate.linux-amd64.tar.gz | tar xvz
-#          sudo mv migrate.linux-amd64 /usr/bin/migrate
-#          which migrate
-#
-#      - name: Run migrations
-#        run: make migrateup
-      - name: Migrate
-        uses: vovavc/migrate-github-action@v0.2.1
-        with:
-            path: ./db/migration
-            database: postgres://root:1234@localhost:5436/small_bank?sslmode=disable
-            command: up
+      - name: Install golang-migrate
+        run: |
+          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.12.2/migrate.linux-amd64.tar.gz | tar xvz
+          sudo mv migrate.linux-amd64 /usr/bin/migrate
+          which migrate
+
+      - name: Run migrations
+        run: make migrateup
+
 
       - name: Test
         run: make test
