@@ -53,6 +53,6 @@ jobs:
             path: ./db/migration
             database: postgres://root:1234@localhost:5436/small_bank?sslmode=disable
             command: up
-            run: make migrateup
+
       - name: Test
         run: make test
