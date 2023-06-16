@@ -5,6 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func errorResponse(err error) gin.H {
+	return gin.H{"error": err.Error()}
+}
+
 type Server struct {
 	store  *db.Store
 	router *gin.Engine
@@ -18,6 +22,6 @@ func NewServer(store *db.Store) *Server {
 	return server
 }
 
-func errorResponse(err error) gin.H {
-	return gin.H{"error": err.Error()}
+func (s *Server) Start(address string) error {
+	return s.router.Run(address)
 }
