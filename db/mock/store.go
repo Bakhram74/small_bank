@@ -2,7 +2,7 @@
 // Source: github.com/Bakhram74/small_bank/db/sqlc (interfaces: Store)
 
 // Package mockdb is a generated GoMock package.
-package mockdb
+package api
 
 import (
 	context "context"
