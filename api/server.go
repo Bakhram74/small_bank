@@ -1,12 +1,32 @@
 package api
 
 import (
+	"database/sql"
+	"fmt"
 	db "github.com/Bakhram74/small_bank/db/sqlc"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
+}
+func (s *Server) validAccount(ctx *gin.Context, accountId int64, currency string) bool {
+	account, err := s.store.GetAccount(ctx, accountId)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return false
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return false
+	}
+	if currency != account.Currency {
+		err := fmt.Errorf("account [%d] currency mismatch: %s vs %s", account.ID, account.Currency, currency)
+		ctx.JSON(http.StatusNotFound, errorResponse(err))
+		return false
+	}
+	return true
 }
 
 type Server struct {
@@ -20,6 +40,7 @@ func NewServer(store db.Store) *Server {
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccounts)
+	router.POST("/transfers", server.createTransfer)
 	server.router = router
 	return server
 }
