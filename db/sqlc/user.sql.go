@@ -53,6 +53,7 @@ WHERE username = $1 LIMIT 1
 
 func (q *Queries) GetUser(ctx context.Context, username string) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUser, username)
+
 	var i User
 	err := row.Scan(
 		&i.Username,
