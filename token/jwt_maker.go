@@ -48,7 +48,6 @@ func (maker *JwtMaker) VerifyToken(token string) (*Payload, error) {
 
 const minSecretKeySize = 32
 
-// NewJWTMaker todo
 func NewJWTMaker(secretKey string) (Maker, error) {
 	if minSecretKeySize > len(secretKey) {
 		return nil, fmt.Errorf("invalid key size: must be at least %d characters", minSecretKeySize)
