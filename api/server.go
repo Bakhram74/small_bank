@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	db "github.com/Bakhram74/small_bank/db/sqlc"
+	"github.com/Bakhram74/small_bank/token"
+	"github.com/Bakhram74/small_bank/util"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -32,27 +34,41 @@ func (s *Server) validAccount(ctx *gin.Context, accountId int64, currency string
 }
 
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	config     util.Config
+	tokenMaker token.Maker
+	store      db.Store
+	router     *gin.Engine
 }
 
-func NewServer(store db.Store) *Server {
-	server := &Server{store: store}
+func (s *Server) setupRouter() {
 	router := gin.Default()
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("currency", validCurrency)
 	}
-	router.POST("/users/", server.createUser)
-	router.GET("/users", server.getUser)
+	router.POST("/users/", s.createUser)
+	router.POST("/users/login", s.loginUser)
+	router.GET("/users", s.getUser)
 
-	router.POST("/accounts", server.createAccount)
-	router.GET("/accounts/:id", server.getAccount)
-	router.GET("/accounts", server.listAccounts)
+	router.POST("/accounts", s.createAccount)
+	router.GET("/accounts/:id", s.getAccount)
+	router.GET("/accounts", s.listAccounts)
 
-	router.POST("/transfers", server.createTransfer)
+	router.POST("/transfers", s.createTransfer)
 
-	server.router = router
-	return server
+	s.router = router
+}
+func NewServer(store db.Store, config util.Config) (*Server, error) {
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker: %w", err)
+	}
+	server := &Server{
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
+	}
+	server.setupRouter()
+	return server, nil
 }
 
 func (s *Server) Start(address string) error {
