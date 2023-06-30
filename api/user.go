@@ -17,13 +17,6 @@ type createUserRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 }
 
-//	type createUserResponse struct {
-//		Username          string    `json:"username"`
-//		FullName          string    `json:"full_name"`
-//		Email             string    `json:"email"`
-//		PasswordChangedAt time.Time `json:"password_changed_at"`
-//		CreatedAt         time.Time `json:"created_at"`
-//	}
 type userResponse struct {
 	Username          string    `json:"username"`
 	FullName          string    `json:"full_name"`
@@ -76,28 +69,28 @@ func (s *Server) createUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, createdUser)
 }
 
-type getUserRequest struct {
-	Username string `form:"username" binding:"required,alphanum"`
-}
-
-func (s *Server) getUser(ctx *gin.Context) {
-	var req getUserRequest
-	err := ctx.ShouldBindQuery(&req)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
-	user, err := s.store.GetUser(ctx, req.Username)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
-			return
-		}
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return
-	}
-	ctx.JSON(http.StatusOK, user)
-}
+//type getUserRequest struct {
+//	Username string `form:"username" binding:"required,alphanum"`
+//}
+//
+//func (s *Server) getUser(ctx *gin.Context) {
+//	var req getUserRequest
+//	err := ctx.ShouldBindQuery(&req)
+//	if err != nil {
+//		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+//		return
+//	}
+//	user, err := s.store.GetUser(ctx, req.Username)
+//	if err != nil {
+//		if err == sql.ErrNoRows {
+//			ctx.JSON(http.StatusNotFound, errorResponse(err))
+//			return
+//		}
+//		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+//		return
+//	}
+//	ctx.JSON(http.StatusOK, user)
+//}
 
 type loginUserRequest struct {
 	Username string `json:"username" binding:"required,alphanum"`
