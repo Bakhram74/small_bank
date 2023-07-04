@@ -11,16 +11,32 @@ import (
 	"time"
 )
 
-func addAuthorization(t *testing.T,
+// func addAuthorization(t *testing.T,
+//
+//	request *http.Request,
+//	tokenMaker token.Maker,
+//	authorizationType string,
+//	username string,
+//	duration time.Duration,
+//
+//	) {
+//		createToken, err := tokenMaker.CreateToken(username, duration)
+//		require.NoError(t, err)
+//		authorizationHeader := fmt.Sprintf("%s %s", authorizationType, createToken)
+//		request.Header.Set(authorizationHeaderKey, authorizationHeader)
+//	}
+func addAuthorization(
+	t *testing.T,
 	request *http.Request,
 	tokenMaker token.Maker,
 	authorizationType string,
 	username string,
 	duration time.Duration,
 ) {
-	createToken, err := tokenMaker.CreateToken(username, duration)
+	token, err := tokenMaker.CreateToken(username, duration)
 	require.NoError(t, err)
-	authorizationHeader := fmt.Sprintf("%s %s", authorizationType, createToken)
+
+	authorizationHeader := fmt.Sprintf("%s %s", authorizationType, token)
 	request.Header.Set(authorizationHeaderKey, authorizationHeader)
 }
 
