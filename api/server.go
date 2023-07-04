@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"fmt"
 	db "github.com/Bakhram74/small_bank/db/sqlc"
 	"github.com/Bakhram74/small_bank/token"
@@ -9,28 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
-	"net/http"
 )
 
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
-}
-func (s *Server) validAccount(ctx *gin.Context, accountId int64, currency string) bool {
-	account, err := s.store.GetAccount(ctx, accountId)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
-			return false
-		}
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return false
-	}
-	if currency != account.Currency {
-		err := fmt.Errorf("account [%d] currency mismatch: %s vs %s", account.ID, account.Currency, currency)
-		ctx.JSON(http.StatusNotFound, errorResponse(err))
-		return false
-	}
-	return true
 }
 
 type Server struct {
