@@ -26,7 +26,7 @@ func (s *Server) setupRouter() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("currency", validCurrency)
 	}
-	router.POST("/users/", s.createUser)
+	router.POST("/users", s.createUser)
 	router.POST("/users/login", s.loginUser)
 
 	authRoutes := router.Group("/").Use(authMiddleware(s.tokenMaker))
