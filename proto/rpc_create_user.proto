@@ -1,0 +1,18 @@
+syntax = "proto3";
+import "user.proto";
+
+package pb;
+
+option go_package = "github.com/Bakhram74/small_bank/pb";
+
+message CreateUserRequest{
+  string  Username = 1;
+  string  FullName = 2;
+  string   Email = 3;
+  string  Password = 4;
+
+}
+
+message CreateUserResponse{
+  User user =1;
+}
