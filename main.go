@@ -12,6 +12,7 @@ import (
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/protobuf/encoding/protojson"
 	"log"
 	"net"
 	"net/http"
@@ -28,9 +29,9 @@ func main() {
 	}
 	store := db.NewStore(conn)
 
-	runGatewayServer(store, config)
+	go runGatewayServer(store, config)
 
-	//runGrpcServer(store, config)
+	runGrpcServer(store, config)
 }
 
 func runGrpcServer(store db.Store, config util.Config) {
@@ -63,6 +64,13 @@ func runGatewayServer(store db.Store, config util.Config) {
 	}
 	ctx, cansel := context.WithCancel(context.Background())
 	defer cansel()
+	runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+		MarshalOptions: protojson.MarshalOptions{
+			UseProtoNames: true,
+		},
+		UnmarshalOptions: protojson.UnmarshalOptions{
+			DiscardUnknown: true,
+		}})
 	grpcMux := runtime.NewServeMux()
 	err = pb.RegisterSmallBankHandlerServer(ctx, grpcMux, server)
 	if err != nil {
