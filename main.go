@@ -64,14 +64,14 @@ func runGatewayServer(store db.Store, config util.Config) {
 	}
 	ctx, cansel := context.WithCancel(context.Background())
 	defer cansel()
-	runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+	jsonOption := runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
 		MarshalOptions: protojson.MarshalOptions{
 			UseProtoNames: true,
 		},
 		UnmarshalOptions: protojson.UnmarshalOptions{
 			DiscardUnknown: true,
 		}})
-	grpcMux := runtime.NewServeMux()
+	grpcMux := runtime.NewServeMux(jsonOption)
 	err = pb.RegisterSmallBankHandlerServer(ctx, grpcMux, server)
 	if err != nil {
 		log.Fatal("cannot register handler server:", err)

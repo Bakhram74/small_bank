@@ -46,6 +46,7 @@ proto:
         --grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative \
         proto/*.proto
 
+
 evans:
 	evans --host localhost --port 9090 -r repl
 
