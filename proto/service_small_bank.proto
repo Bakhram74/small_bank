@@ -6,16 +6,28 @@ import "google/api/annotations.proto";
 import "rpc_create_user.proto";
 import "rpc_login_user.proto";
 
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/Bakhram74/small_bank/pb";
 
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Small bank API";
+    version: "1.0";
+    contact: {
+      name: "Small bank project";
+      url: "https://github.com/Bakhram74/small_bank";
+      email: "bakhram7493@gmail.com";
+    };
 
+  };
+};
 service SmallBank{
   rpc CreateUser(CreateUserRequest) returns(CreateUserResponse){
     option (google.api.http) = {
-             post: "/v1/create_user"
-             body: "*"
-            };
+      post: "/v1/create_user"
+      body: "*"
+    };
   }
   rpc LoginUser(LoginUserRequest) returns(LoginUserResponse){
     option (google.api.http) = {

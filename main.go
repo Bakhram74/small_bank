@@ -79,6 +79,10 @@ func runGatewayServer(store db.Store, config util.Config) {
 	}
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
+
+	fl := http.FileServer(http.Dir("./doc/swagger"))
+	mux.Handle("/swagger/", http.StripPrefix("/swagger/", fl))
+
 	listener, err := net.Listen("tcp", config.HttpServerAddress)
 	if err != nil {
 		log.Fatalf("cannot create listener %s", err)
