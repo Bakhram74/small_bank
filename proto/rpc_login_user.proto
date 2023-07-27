@@ -6,8 +6,8 @@ package pb;
 option go_package = "github.com/Bakhram74/small_bank/pb";
 
 message LoginUserRequest{
-  string  Username = 1;
-  string  Password = 2;
+  string  username = 1;
+  string  password = 2;
 
 }
 

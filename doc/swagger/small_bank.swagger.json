@@ -94,16 +94,16 @@
     "pbCreateUserRequest": {
       "type": "object",
       "properties": {
-        "Username": {
+        "username": {
           "type": "string"
         },
-        "FullName": {
+        "fullName": {
           "type": "string"
         },
-        "Email": {
+        "email": {
           "type": "string"
         },
-        "Password": {
+        "password": {
           "type": "string"
         }
       }
@@ -119,10 +119,10 @@
     "pbLoginUserRequest": {
       "type": "object",
       "properties": {
-        "Username": {
+        "username": {
           "type": "string"
         },
-        "Password": {
+        "password": {
           "type": "string"
         }
       }
@@ -155,20 +155,20 @@
     "pbUser": {
       "type": "object",
       "properties": {
-        "Username": {
+        "username": {
           "type": "string"
         },
-        "FullName": {
+        "fullName": {
           "type": "string"
         },
-        "Email": {
+        "email": {
           "type": "string"
         },
-        "PasswordChangedAt": {
+        "passwordChangedAt": {
           "type": "string",
           "format": "date-time"
         },
-        "CreatedAt": {
+        "createdAt": {
           "type": "string",
           "format": "date-time"
         }
