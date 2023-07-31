@@ -2,7 +2,7 @@
 DB_URL="postgresql://root:1234@localhost:5432/small_bank?sslmode=disable"
 
 postgres:
-	docker run --name postgres12 --network bank_network  -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=1234 -d postgres:latest
+	docker run --name postgres12 --network bank_network  -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=1234 -d postgres:alpine3.14
 
 createdb:
 	docker exec -it postgres12 createdb --username=root --owner=root small_bank

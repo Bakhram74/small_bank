@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:alpine3.14
+    container_name: db_postgres
+    environment:
+     - POSTGRES_USER=mike
+     - POSTGRES_PASSWORD=1234
+     - POSTGRES_DB=small_bank
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: my_app
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_SOURCE=postgresql://root:1234@postgres:5432/small_bank?sslmode=disable"
+    depends_on:
+      - postgres
+
+    command: [ "/app/main" ]
+
+    entrypoint:
+          ["./app/wait-for.sh","postgres:5432","--","./app/start.sh"]
