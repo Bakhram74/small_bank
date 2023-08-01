@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"net/http"
 	"time"
 )
 
@@ -36,4 +37,44 @@ func GrpcLogger(
 		Dur("duration", duration).Msg("received a gRPC request")
 
 	return result, err
+}
+
+type ResponseRecorder struct {
+	http.ResponseWriter
+	StatusCode int
+	Body       []byte
+}
+
+func (res *ResponseRecorder) WriteHeader(statusCode int) {
+	res.StatusCode = statusCode
+	res.ResponseWriter.WriteHeader(statusCode)
+}
+func (res *ResponseRecorder) Write(body []byte) (int, error) {
+	res.Body = body
+	return res.ResponseWriter.Write(body)
+}
+func HttpLogger(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		startTime := time.Now()
+		recorder := &ResponseRecorder{
+			ResponseWriter: w,
+			StatusCode:     http.StatusOK,
+		}
+		handler.ServeHTTP(recorder, r)
+		duration := time.Since(startTime)
+
+		logger := log.Info()
+		if recorder.StatusCode != http.StatusOK {
+			logger = log.Error().Bytes("body", recorder.Body)
+		}
+		logger.Str("protocol", "http").
+			Str("method", r.Method).
+			Str("path", r.RequestURI).
+			Int("status_code", recorder.StatusCode).
+			Str("status_text", http.StatusText(recorder.StatusCode)).
+			Dur("duration", duration).
+			Msg("received a HTTP request")
+
+	})
+
 }
