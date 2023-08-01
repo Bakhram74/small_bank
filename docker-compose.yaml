@@ -4,9 +4,11 @@ services:
     image: postgres:alpine3.14
     container_name: db_postgres
     environment:
-     - POSTGRES_USER=mike
+     - POSTGRES_USER=root
      - POSTGRES_PASSWORD=1234
      - POSTGRES_DB=small_bank
+#    networks:
+#      - bank-net
 
   api:
     build:
@@ -19,8 +21,13 @@ services:
       - DB_SOURCE=postgresql://root:1234@postgres:5432/small_bank?sslmode=disable"
     depends_on:
       - postgres
+#    networks:
+#      - bank-net
 
-    command: [ "/app/main" ]
+#networks:
+#  bank-net:
+#    driver: bridge
 
-    entrypoint:
-          ["./app/wait-for.sh","postgres:5432","--","./app/start.sh"]
+#    command: [ "/app/main" ]
+#    entrypoint:
+#          ["./app/wait-for.sh","postgres:5432","--","./app/start.sh"]
