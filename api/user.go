@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	db "github.com/Bakhram74/small_bank/db/sqlc"
 	"github.com/Bakhram74/small_bank/util"
 	"github.com/gin-gonic/gin"
@@ -93,7 +94,7 @@ func (s *Server) loginUser(ctx *gin.Context) {
 	}
 	user, err := s.store.GetUser(ctx, req.Username)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
