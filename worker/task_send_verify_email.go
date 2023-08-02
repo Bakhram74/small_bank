@@ -10,13 +10,13 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const TaskSendVerifyEmail = "task:send_verify_email4"
+const TaskSendVerifyEmail = "task:send_verify_email"
 
 type PayloadSendVerifyEmail struct {
 	Username string `json:"username"`
 }
 
-func (distributor RedisTaskDistributor) DistributeTaskSendVerifyEmail(
+func (distributor *RedisTaskDistributor) DistributeTaskSendVerifyEmail(
 	ctx context.Context,
 	payload *PayloadSendVerifyEmail,
 	opts ...asynq.Option,
@@ -35,7 +35,7 @@ func (distributor RedisTaskDistributor) DistributeTaskSendVerifyEmail(
 	return nil
 }
 
-func (processor RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Context, task *asynq.Task) error {
+func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Context, task *asynq.Task) error {
 	var payload PayloadSendVerifyEmail
 	if err := json.Unmarshal(task.Payload(), &payload); err != nil {
 		return fmt.Errorf("failed to unmarshal payload: %w", asynq.SkipRetry)
