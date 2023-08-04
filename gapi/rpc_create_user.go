@@ -46,9 +46,6 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	}
 	txResult, err := server.store.CreateUserTx(ctx, arg)
 	if err != nil {
-		return nil, err
-	}
-	if err != nil {
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) {
 			switch pqErr.Code.Name() {
